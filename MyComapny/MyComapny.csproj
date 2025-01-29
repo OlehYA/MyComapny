@@ -23,9 +23,7 @@
     <Folder Include="Domain\Enums\" />
     <Folder Include="Domain\Repositories\Abstract\" />
     <Folder Include="Domain\Repositories\EntityFramework\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\ViewComponents\" />
-    <Folder Include="Views\Shared\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\js\" />
