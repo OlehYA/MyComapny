@@ -9,14 +9,14 @@ namespace MyComapny
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Setings in configuration file appsettings.json
-            IConfigurationBuilder configBuilder = new ConfigurationBuilder()
+            IConfigurationBuilder configBuild = new ConfigurationBuilder()
                 .SetBasePath(builder.Environment.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             //Cover the section Project in object form for confortable
 
-            IConfiguration configuration = configBuilder.Build();
+            IConfiguration configuration = configBuild.Build();
             AppConfig config = configuration.GetSection("Project").Get<AppConfig>()!;
 
             //Setings functions controllers
