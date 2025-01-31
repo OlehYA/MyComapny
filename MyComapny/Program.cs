@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using MyComapny.Domain;
@@ -6,7 +7,7 @@ using MyComapny.Infrastructure;
 namespace MyComapny
 {
     public class Program
-    { 
+    {
         public static async Task Main(string[] args)
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -25,7 +26,29 @@ namespace MyComapny
             //Connection context DB
             builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlServer(config.Database.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
+
+            //Setting Indentity system
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+
+            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            //Setting Auth cookie
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "myCompanyAuth";
+                options.Cookie.HttpOnly = true;
+                options.LoginPath = "/admin/login";
+                options.AccessDeniedPath = "/admin/accessdenied";
+                options.SlidingExpiration = true;
+            });
             
+
 
             //Setings functions controllers
             builder.Services.AddControllersWithViews();
@@ -39,11 +62,16 @@ namespace MyComapny
             //Setings sustem routing
             app.UseRouting();
 
+            //Connection authentication and authorization
+            app.UseCookiePolicy();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             //registration need us routing
 
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
 
-           await app.RunAsync();
+            await app.RunAsync();
         }
     }
 }
