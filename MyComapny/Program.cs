@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using MyComapny.Domain;
+using MyComapny.Domain.Repositories.Abstract;
+using MyComapny.Domain.Repositories.EntityFramework;
 using MyComapny.Infrastructure;
 
 namespace MyComapny
@@ -26,6 +28,10 @@ namespace MyComapny
             //Connection context DB
             builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlServer(config.Database.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
+
+            builder.Services.AddTransient<IServiceCategoriesRepository, EFServiceCategoriesRepository>();
+            builder.Services.AddTransient<IServiceRepository, EFServicesRepository>();
+            builder.Services.AddTransient<DataManage>();
 
             //Setting Indentity system
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
