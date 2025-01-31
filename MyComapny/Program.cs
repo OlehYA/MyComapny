@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using MyComapny.Domain;
 using MyComapny.Infrastructure;
 
 namespace MyComapny
@@ -18,6 +21,11 @@ namespace MyComapny
 
             IConfiguration configuration = configBuild.Build();
             AppConfig config = configuration.GetSection("Project").Get<AppConfig>()!;
+
+            //Connection context DB
+            builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlServer(config.Database.ConnectionString)
+            .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
+            
 
             //Setings functions controllers
             builder.Services.AddControllersWithViews();
