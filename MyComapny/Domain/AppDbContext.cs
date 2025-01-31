@@ -20,8 +20,8 @@ namespace MyComapny.Domain
             base.OnModelCreating(builder);
 
             string adminName = "admin";
-            string roleAdminId = "458E4B9D - C41C - 4FEC - BAD0 - 8630C426BBC2";
-            string userAdminId = "7349C8A0-F78D-4307-9C39-01F59E59DC4F";
+            string roleAdminId = Guid.NewGuid().ToString();
+            string userAdminId = Guid.NewGuid().ToString();
 
             //Add role administration cate
             builder.Entity<IdentityRole>().HasData(new IdentityRole()
@@ -41,6 +41,7 @@ namespace MyComapny.Domain
                 NormalizedEmail = "admin@admin.com",
                 EmailConfirmed = true,
                 PasswordHash  = new PasswordHasher<IdentityUser>().HashPassword(new IdentityUser(), adminName),
+                SecurityStamp = string.Empty,
                 PhoneNumberConfirmed = true
             });
 

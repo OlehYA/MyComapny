@@ -49,7 +49,6 @@ namespace MyComapny
             });
             
 
-
             //Setings functions controllers
             builder.Services.AddControllersWithViews();
 
